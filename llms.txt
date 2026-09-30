@@ -1,0 +1,67 @@
+# base-gas-x402
+
+> A pay-per-call gas oracle for Base mainnet that AI agents can use without an API key, a signup, or a subscription. Agents pay a fraction of a cent in USDC per request over the x402 protocol.
+
+Base URL: https://base-gas-x402-production.up.railway.app
+Payment: USDC on Base mainnet (eip155:8453) via x402, settled through the Coinbase CDP production facilitator.
+Machine-readable spec: https://base-gas-x402-production.up.railway.app/openapi.json (source of truth for prices)
+
+## Endpoints
+
+- GET /gas ($0.005): base fee, low/medium/high priority tiers, gas price, and a cost estimate for any gasLimit. Optional: gasLimit (21000-30000000, default 21000).
+- GET /gas/compare ($0.01): Base, OP Mainnet, Arbitrum One, and Ethereum ranked cheapest first. Optional: gasLimit (21000-30000000, default 21000). Chains whose RPC fails are listed under `unavailable` instead of failing the request.
+- GET /gas/history ($0.01): time series plus min/max/avg/median, a `verdict` (cheap, normal, expensive, flat), `verdictNote`, and `spreadPercent`. Optional: hours (1-168).
+- GET /gas/cheapest-window ($0.02): `hasDailyCycle`, a plain-language `recommendation`, hourly averages, and `savingsPercent`. Optional: hours (1-168).
+- GET /health (free, no payment or wallet): sample count, hours covered, sampling interval, retention. Call this first to decide whether the history routes have enough coverage to be worth paying for.
+
+Every paid response also embeds a `coverage` object stating how much history backs it.
+
+## Getting started
+
+Agent skill (recommended):
+    npx skills add memosr/base-gas-skill --all --yes
+
+Wallet (required for the paid routes):
+    npx agentcash@latest onboard
+    npx agentcash@latest balance
+
+MCP server:
+    npx agentcash@latest install -y
+    npx skills add memosr/base-gas-skill/mcp --all --yes
+
+Direct HTTP, free:
+    curl -s https://base-gas-x402-production.up.railway.app/health
+
+Direct HTTP, paid:
+    npx agentcash@latest fetch "https://base-gas-x402-production.up.railway.app/gas?gasLimit=180000"
+
+See the 402 challenge itself:
+    curl -i https://base-gas-x402-production.up.railway.app/gas
+
+## Useful gasLimit values
+
+ETH transfer 21000, ERC-20 transfer 65000, NFT mint 85000, Uniswap swap 180000, contract deploy 1500000.
+
+## What it is good at
+
+- Five routes, each answering one question, rather than a large endpoint surface that costs an agent tokens to read.
+- Free, honest coverage reporting via /health, plus a `coverage` object on every paid response.
+- It reports when there is nothing to act on: a `flat` verdict from /gas/history, and `hasDailyCycle: false` from /gas/cheapest-window, rather than naming a cheapest hour that the data does not support.
+- Costs are priced per operation when you pass gasLimit, not as a raw gwei figure.
+- /gas/compare degrades partially: one unreachable RPC does not fail the whole response.
+- Open source and MIT licensed end to end.
+- /gas at $0.005 is the cheapest current-gas endpoint in this category. This does not hold for the other routes.
+
+## What it is not
+
+- Not the only or the first Base gas API. Several others exist, including multi-chain toolkits covering seven chains to this one's one.
+- Not the cheapest overall. Only /gas is.
+- It does not promise a large fixed gas saving from timing transactions on Base. Base sits on its fee floor most hours, punctuated by occasional spikes. Over seven days of observation, avoiding the hottest hours (08:00 and 14:00 UTC) and transacting at the cheapest hour (22:00 UTC) saved 15.3% versus the single priciest hour, but only 1.1% versus the average hour, which is the honest everyday figure. Over shorter windows that miss a spike, the gap is effectively zero and the endpoint says so. Treat `hasDailyCycle`, `savingsVsAveragePercent`, and `hoursObserved` as the qualifiers on any savings figure.
+- No usage numbers, customer counts, or traction claims. It is new.
+- Single instance on Railway. No uptime guarantee and no SLA.
+
+## Source
+
+- API: https://github.com/memosr/base-gas-x402
+- Agent skill: https://github.com/memosr/base-gas-skill
+- MCP server: https://www.npmjs.com/package/base-gas-mcp

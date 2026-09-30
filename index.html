@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>base-gas-x402: gas data for agents on Base</title>
+<meta name="description" content="A pay-per-call gas oracle for Base mainnet. Five endpoints, no API key, no signup. Agents pay a fraction of a cent in USDC per request over the x402 protocol.">
+<link rel="canonical" href="https://base-gas-x402.vercel.app/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="base-gas-x402">
+<meta property="og:url" content="https://base-gas-x402.vercel.app/">
+<meta property="og:title" content="base-gas-x402: gas data for agents on Base">
+<meta property="og:description" content="Five endpoints, no API key, paid per call in USDC. Including the one answer nobody else gives you: sometimes there is nothing to optimise.">
+<meta property="og:image" content="https://base-gas-x402.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="base-gas-x402: gas data for agents on Base.">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="base-gas-x402: gas data for agents on Base">
+<meta name="twitter:description" content="Five endpoints, no API key, paid per call in USDC. Including the one answer nobody else gives you: sometimes there is nothing to optimise.">
+<meta name="twitter:image" content="https://base-gas-x402.vercel.app/og.png">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0e1116">
+
+<style>
+:root{
+  --bg:#0e1116;
+  --bg-raised:#151a21;
+  --line:#242b35;
+  --line-soft:#1c222b;
+  --text:#d7dee7;
+  --text-strong:#f2f6fb;
+  --muted:#97a3b2;
+  --accent:#4d8dff;
+  --accent-dim:#1d2c47;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  --wrap:760px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:24px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:17px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-dim)}
+a:hover{border-bottom-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:-9999px;top:0}
+.skip:focus{left:8px;top:8px;z-index:20;background:var(--bg-raised);color:var(--text-strong);padding:10px 14px;border:1px solid var(--accent)}
+
+/* hero */
+.hero{padding:104px 0 72px;text-align:center}
+.mark{width:44px;height:44px;margin:0 auto 26px;display:block}
+h1{
+  font-family:var(--mono);font-size:2.6rem;font-weight:600;letter-spacing:-1px;
+  color:var(--text-strong);margin:0 0 20px;line-height:1.1;
+}
+h1 .x{color:var(--accent)}
+.tagline{font-size:1.2rem;color:var(--text);margin:0 auto 12px;max-width:34em}
+.tagline strong{color:var(--text-strong);font-weight:600}
+.hero-note{color:var(--muted);font-size:1rem;margin:0 auto 40px;max-width:34em}
+
+.jump{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;list-style:none;margin:0 0 34px;padding:0}
+.jump a{
+  display:block;font-family:var(--mono);font-size:13px;color:var(--muted);
+  border:1px solid var(--line);border-radius:999px;padding:7px 16px;
+}
+.jump a:hover{color:var(--text-strong);border-color:var(--accent)}
+
+.status{
+  font-family:var(--mono);font-size:12.5px;color:var(--muted);
+  margin:0;padding-top:22px;border-top:1px solid var(--line-soft);
+}
+.status .dot{color:var(--accent)}
+.status a{border-bottom-color:transparent}
+
+/* sections */
+main section{padding:60px 0;border-top:1px solid var(--line-soft)}
+h2{font-size:1.55rem;font-weight:600;color:var(--text-strong);letter-spacing:-.4px;margin:0 0 26px;line-height:1.25}
+h3{font-size:1.05rem;font-weight:600;color:var(--text-strong);margin:34px 0 10px;letter-spacing:-.2px}
+p{margin:0 0 16px}
+.lead{font-size:1.08rem;color:var(--text);margin:0 0 26px}
+ul.plain{padding-left:20px;margin:0 0 18px}
+ul.plain li{margin-bottom:8px}
+code{font-family:var(--mono);font-size:.88em;background:var(--bg-raised);border:1px solid var(--line-soft);border-radius:4px;padding:1px 5px;color:var(--text-strong);word-break:break-word}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+
+/* code blocks */
+.code{margin:0 0 20px;border:1px solid var(--line);border-radius:8px;background:var(--bg-raised);overflow:hidden}
+.code-head{display:flex;align-items:center;gap:12px;padding:7px 8px 7px 14px;border-bottom:1px solid var(--line-soft);min-height:40px}
+.code-head .label{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:var(--muted);margin-right:auto;word-break:break-all}
+.copy{font-family:var(--mono);font-size:11.5px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:5px;padding:5px 10px;cursor:pointer}
+.copy:hover{color:var(--text-strong);border-color:var(--accent)}
+.code pre{margin:0;padding:14px;font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--text-strong);white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* tables */
+.table-scroll{overflow-x:auto;margin:0 0 22px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+caption{text-align:left;color:var(--muted);font-size:13px;padding-bottom:12px}
+th,td{text-align:left;padding:11px 14px 11px 0;border-bottom:1px solid var(--line-soft);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+td:first-child{font-family:var(--mono);color:var(--text-strong);white-space:nowrap}
+td.price{font-family:var(--mono);color:var(--accent);white-space:nowrap}
+td.free{font-family:var(--mono);color:var(--muted)}
+tbody tr:last-child td{border-bottom:0}
+
+/* claims */
+blockquote{margin:0 0 20px;padding:2px 0 2px 20px;border-left:2px solid var(--accent);color:var(--text)}
+blockquote p:last-child{margin-bottom:0}
+dl.claims{margin:0 0 30px}
+dl.claims dt{color:var(--text-strong);font-weight:600;margin-top:24px}
+dl.claims dd{margin:4px 0 0;color:var(--text)}
+dl.claims dt:first-child{margin-top:0}
+.note{border-top:1px solid var(--line-soft);padding-top:20px;color:var(--muted);font-size:15px;margin:0}
+
+footer{border-top:1px solid var(--line-soft);padding:38px 0 64px;color:var(--muted);font-size:14px}
+footer ul{list-style:none;padding:0;margin:0 0 20px;display:flex;flex-wrap:wrap;gap:10px 24px;font-family:var(--mono);font-size:13px}
+footer p{margin:0 0 6px;font-size:13px}
+
+@media (max-width:640px){
+  body{font-size:16px}
+  .hero{padding:64px 0 52px}
+  h1{font-size:1.85rem;letter-spacing:-.5px}
+  .tagline{font-size:1.05rem}
+  h2{font-size:1.3rem}
+  main section{padding:44px 0}
+  .wrap{padding:0 18px}
+  .code pre{font-size:12.5px;padding:12px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#intro">Skip to content</a>
+
+<header class="hero">
+  <div class="wrap">
+    <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <circle cx="32" cy="32" r="18" fill="none" stroke="#4d8dff" stroke-width="5"/>
+      <path d="M32 21v12h9" fill="none" stroke="#4d8dff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+    <h1>base-gas-<span class="x">x402</span></h1>
+
+    <p class="tagline"><strong>Gas data for agents on Base.</strong> Five endpoints, no API key, paid per call in USDC.</p>
+    <p class="hero-note">Including the one answer nobody else gives you: sometimes there is nothing to optimise.</p>
+
+    <nav aria-label="Sections">
+      <ul class="jump">
+        <li><a href="#intro">Intro</a></li>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#api">API</a></li>
+        <li><a href="#advantages">Advantages</a></li>
+        <li><a href="#findings">Findings</a></li>
+      </ul>
+    </nav>
+
+    <p class="status" id="coverage">
+      <span class="dot">&#9679;</span>
+      <span id="coverage-text">Sampling Base gas every 5 minutes, 168 hours of retention.</span>
+      <a href="https://base-gas-x402-production.up.railway.app/health">Check /health</a>
+    </p>
+  </div>
+</header>
+
+<main>
+
+<!-- WHAT'S NEW -->
+<section id="whats-new" aria-labelledby="new-h">
+  <div class="wrap">
+    <h2 id="new-h">What's new</h2>
+    <ul class="plain">
+      <li><strong>Costs in USD.</strong> <code>/gas</code> and <code>/gas/compare</code> now return <code>usd</code> next to gwei and ETH, priced from the Chainlink ETH/USD feed on Base.</li>
+      <li><strong>Hours to avoid.</strong> <code>/gas/cheapest-window</code> now names <code>avoidHoursUtc</code>, plus the honest everyday saving versus the average hour.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- A. INTRODUCTION -->
+<section id="intro" aria-labelledby="intro-h">
+  <div class="wrap">
+    <h2 id="intro-h">What this is</h2>
+
+    <p class="lead">A pay-per-call gas oracle for Base mainnet that AI agents can use without an API key, a signup, or a subscription. Payment settles in USDC on Base (<code>eip155:8453</code>) through the Coinbase CDP production facilitator.</p>
+
+    <h3>Who it is for</h3>
+    <p>Developers building AI agents that transact on Base. And, secondarily, developers evaluating x402 as a way to sell their own APIs: all of it is open source and readable as a reference implementation.</p>
+
+    <h3>Why not just call an RPC?</h3>
+    <p>An RPC tells you the current gas price but not whether it is high or low, because it has no memory. This service samples Base every five minutes, so it can answer:</p>
+    <ul class="plain">
+      <li>Is gas cheap, normal, expensive, or flat right now?</li>
+      <li>How does Base compare to OP Mainnet, Arbitrum One, and Ethereum?</li>
+      <li>Would waiting for a cheaper hour actually help?</li>
+    </ul>
+
+    <h3>The 402 part</h3>
+    <blockquote>
+      <p>HTTP 402 Payment Required has been reserved and unused since 1997. x402 finally uses it. Your agent requests data, the server answers <span class="num">402</span> with a price, the agent pays in USDC, and the data comes back. One round trip, no account.</p>
+    </blockquote>
+    <p>See it for yourself. This costs nothing, you never pay the challenge itself:</p>
+    <div class="code">
+      <div class="code-head"><span class="label">the 402 challenge</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>curl -i https://base-gas-x402-production.up.railway.app/gas</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- B. SETUP -->
+<section id="setup" aria-labelledby="setup-h">
+  <div class="wrap">
+    <h2 id="setup-h">Setup</h2>
+    <p class="lead">Three ways in. Pick one.</p>
+
+    <h3>1. Agent skill (recommended)</h3>
+    <div class="code">
+      <div class="code-head"><span class="label">install</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>npx skills add memosr/base-gas-skill --all --yes</code></pre>
+    </div>
+    <p>Then ask the agent: <code>What is gas on Base right now?</code></p>
+    <p>The paid routes need a funded AgentCash wallet:</p>
+    <div class="code">
+      <div class="code-head"><span class="label">wallet</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>npx agentcash@latest onboard
+npx agentcash@latest balance</code></pre>
+    </div>
+
+    <h3>2. MCP server</h3>
+    <div class="code">
+      <div class="code-head"><span class="label">install</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>npx agentcash@latest install -y
+npx skills add memosr/base-gas-skill/mcp --all --yes</code></pre>
+    </div>
+    <p>Published on npm as <a href="https://www.npmjs.com/package/base-gas-mcp"><code>base-gas-mcp</code></a>.</p>
+
+    <h3>3. Direct HTTP</h3>
+    <div class="code">
+      <div class="code-head"><span class="label">free, no wallet needed</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>curl -s https://base-gas-x402-production.up.railway.app/health</code></pre>
+    </div>
+    <div class="code">
+      <div class="code-head"><span class="label">paid</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>npx agentcash@latest fetch "https://base-gas-x402-production.up.railway.app/gas?gasLimit=180000"</code></pre>
+    </div>
+    <p class="note">Full docs live with the code: <a href="https://github.com/memosr/base-gas-x402">API repo</a>, <a href="https://github.com/memosr/base-gas-skill">skill repo</a>, <a href="https://base-gas-x402-production.up.railway.app/openapi.json">OpenAPI</a>.</p>
+  </div>
+</section>
+
+<!-- API -->
+<section id="api" aria-labelledby="api-h">
+  <div class="wrap">
+    <h2 id="api-h">Five routes</h2>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Prices are transcribed from <a href="https://base-gas-x402-production.up.railway.app/openapi.json">/openapi.json</a>, which is the source of truth.</caption>
+        <thead>
+          <tr><th scope="col">Route</th><th scope="col">Price</th><th scope="col">Returns</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>GET /gas</td><td class="price">$0.005</td><td>Base fee, priority tiers, gas price, cost for any <code>gasLimit</code></td></tr>
+          <tr><td>GET /gas/compare</td><td class="price">$0.01</td><td>Base, OP Mainnet, Arbitrum One, Ethereum, cheapest first</td></tr>
+          <tr><td>GET /gas/history</td><td class="price">$0.01</td><td>Time series, min/max/avg/median, <code>verdict</code>, <code>spreadPercent</code></td></tr>
+          <tr><td>GET /gas/cheapest-window</td><td class="price">$0.02</td><td><code>hasDailyCycle</code>, <code>recommendation</code>, hourly averages</td></tr>
+          <tr><td>GET /health</td><td class="free">free</td><td>Samples, hours covered, interval, retention</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><code>/gas</code> and <code>/gas/compare</code> take <code>gasLimit</code> (<span class="num">21000</span> to <span class="num">30000000</span>). <code>/gas/history</code> and <code>/gas/cheapest-window</code> take <code>hours</code> (<span class="num">1</span> to <span class="num">168</span>).</p>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Pass the gas limit of the operation and get its actual cost.</caption>
+        <thead><tr><th scope="col">Operation</th><th scope="col">gasLimit</th></tr></thead>
+        <tbody>
+          <tr><td>ETH transfer</td><td class="price">21000</td></tr>
+          <tr><td>ERC-20 transfer</td><td class="price">65000</td></tr>
+          <tr><td>NFT mint</td><td class="price">85000</td></tr>
+          <tr><td>Uniswap swap</td><td class="price">180000</td></tr>
+          <tr><td>Contract deploy</td><td class="price">1500000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Real response: <code>/gas</code></h3>
+    <div class="code">
+      <div class="code-head"><span class="label">GET /gas?gasLimit=21000</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>{
+  "baseFeePerGas": "0.005",
+  "priorityFeePerGas": { "low": "0.000580202", "medium": "0.001019902", "high": "0.011204355" },
+  "gasPrice": "0.006",
+  "estimatedTransferCost": {
+    "gasLimit": 21000,
+    "basis": "baseFee + medium priority fee",
+    "gwei": "126.417942",
+    "eth": "0.000000126417942",
+    "usd": "0.00034"
+  },
+  "ethUsd": { "price": "2689.87", "source": "chainlink-eth-usd-base", "updatedAt": "2026-09-30T16:44:29.000Z" }
+}</code></pre>
+    </div>
+    <p>A live call, default <code>gasLimit</code> (a plain ETH transfer). <code>estimatedTransferCost.usd</code> comes from the Chainlink ETH/USD feed on Base (<code>ethUsd</code>). If the feed is unreadable, both fields are <code>null</code> and the rest of the response is unchanged.</p>
+
+    <h3>Real response: <code>/gas/compare</code></h3>
+    <p>Base comes second here, not first. That is left in on purpose: anyone can call the endpoint and check.</p>
+    <div class="code">
+      <div class="code-head"><span class="label">GET /gas/compare</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>{
+  "gasLimit": 21000,
+  "chains": [
+    { "chain": "optimism", "label": "OP Mainnet", "gasPrice": "0.001000371",
+      "estimatedCost": { "eth": "0.000000021007791" } },
+    { "chain": "base", "label": "Base", "gasPrice": "0.006",
+      "estimatedCost": { "eth": "0.000000126" } },
+    { "chain": "arbitrum", "label": "Arbitrum One", "gasPrice": "0.02",
+      "estimatedCost": { "eth": "0.00000042" } },
+    { "chain": "ethereum", "label": "Ethereum", "gasPrice": "0.046909277",
+      "estimatedCost": { "eth": "0.000000985094817" } }
+  ],
+  "cheapest": "optimism",
+  "baseRank": 2,
+  "baseVsEthereum": "Base is 7.8x cheaper than Ethereum",
+  "unavailable": []
+}</code></pre>
+    </div>
+
+    <h3>Real response: <code>/gas/cheapest-window</code></h3>
+    <div class="code">
+      <div class="code-head"><span class="label">GET /gas/cheapest-window</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>{
+  "hasDailyCycle": true,
+  "recommendation": "Avoid 08:00 and 14:00 UTC. The cheapest hour is 22:00 UTC: about 1.1% cheaper than the average hour and 15.3% cheaper than the priciest.",
+  "savingsPercent": 15.3,
+  "savingsVsAveragePercent": 1.1,
+  "avoidHoursUtc": [8, 14],
+  "cheapestHourUtc": 22
+}</code></pre>
+    </div>
+    <p>Seven days of observation. <code>avoidHoursUtc</code> names the hours running hot, worst first; 22:00 UTC is the cheapest hour. Read the two percentages separately: <code>savingsPercent</code> (15.3%) compares the cheapest hour against the single priciest one and can be dominated by one spike, while <code>savingsVsAveragePercent</code> (1.1%) compares it against the average hour, which is the honest everyday saving.</p>
+    <p>Over shorter windows that miss a spike, this endpoint returns <code>hasDailyCycle: false</code> and says plainly that there is nothing to time, rather than naming a cheapest hour the data does not support.</p>
+  </div>
+</section>
+
+<!-- C. ADVANTAGES -->
+<section id="advantages" aria-labelledby="adv-h">
+  <div class="wrap">
+    <h2 id="adv-h">Advantages and differences</h2>
+    <p class="lead">Several Base gas endpoints exist, including multi-chain toolkits covering seven chains to this one's one. Here is where this one differs.</p>
+
+    <dl class="claims">
+      <dt>Focused, not a dumping ground</dt>
+      <dd>Five routes, one question each. Competitors ship <span class="num">67</span>, <span class="num">307</span>, and <span class="num">353</span> endpoints; the AgentCash validator warns above <span class="num">40</span>, because a large surface eats an agent's token budget.</dd>
+
+      <dt>Honest about its own data</dt>
+      <dd><code>/health</code> is free and reports how much history exists, so you can decide whether a paid history call is worth it. Every paid response carries a <code>coverage</code> object. I have not found another Base gas endpoint that does this.</dd>
+
+      <dt>It tells you when there is nothing to do</dt>
+      <dd>Base spends most hours pinned to its fee floor. When the window you asked about shows no real variation, <code>/gas/history</code> returns <code>flat</code> and <code>/gas/cheapest-window</code> returns <code>hasDailyCycle: false</code> instead of inventing a cheapest hour. An endpoint that always names one is selling a decision that cannot be made.</dd>
+
+      <dt>Priced per operation</dt>
+      <dd>Pass <code>gasLimit</code>, get the cost of the thing you are about to do, not a gwei figure to multiply yourself.</dd>
+
+      <dt>Fails partially, not totally</dt>
+      <dd><code>/gas/compare</code> reads four chains independently. One dead RPC lands in <code>unavailable</code> instead of killing the response you paid for.</dd>
+
+      <dt>Open source, end to end</dt>
+      <dd><a href="https://github.com/memosr/base-gas-x402">API</a>, <a href="https://www.npmjs.com/package/base-gas-mcp">MCP server</a>, and <a href="https://github.com/memosr/base-gas-skill">skill</a> are public and MIT licensed. The skill ships rules that steer agents away from overspending.</dd>
+
+      <dt>Cheapest current-gas endpoint in the category</dt>
+      <dd><code>/gas</code> at <span class="num">$0.005</span>, against <span class="num">$0.01</span>, <span class="num">$0.013</span>, <span class="num">$0.05</span>, and <span class="num">$0.10</span>. Only for <code>/gas</code>: <code>/gas/history</code> at <span class="num">$0.01</span> is not the cheapest, a <span class="num">$0.001</span> competitor exists.</dd>
+    </dl>
+
+    <p class="note">What it is not: not the only or first Base gas API, and not the cheapest overall. It will not save you money by timing transactions on Base, because there is nothing there to time. Single instance on Railway, no uptime guarantee and no SLA. No usage numbers to quote, it is new.</p>
+  </div>
+</section>
+
+<!-- FINDINGS -->
+<section id="findings" aria-labelledby="find-h">
+  <div class="wrap">
+    <h2 id="find-h">Findings</h2>
+    <p class="lead">Two x402 failure modes found while building this. Both are reproducible and both cost hours. If you run an x402 origin, they may save you an afternoon.</p>
+
+    <h3>1. A missing <code>trust proxy</code> silently blocks discovery</h3>
+    <p>Railway and most PaaS edges terminate TLS and forward plain HTTP. Express reports <code>req.protocol</code> as <code>http</code>, x402 advertises an <code>http://</code> resource, and Bazaar registration fails hourly with:</p>
+    <div class="code">
+      <div class="code-head"><span class="label">hourly, invisibly</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>resource must start with 'https://' when protocol type is http</code></pre>
+    </div>
+    <p>Nothing surfaces it: the discovery CLI reports zero warnings and the endpoints stay live and payable, while the index never updates. One line fixes it:</p>
+    <div class="code">
+      <div class="code-head"><span class="label">the fix</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>app.set("trust proxy", true);</code></pre>
+    </div>
+
+    <h3>2. The CDP facilitator size-limits the payment payload</h3>
+    <p>The bazaar metadata from the 402 challenge is echoed back inside the payment payload. Past a threshold the facilitator reports it as a schema error:</p>
+    <div class="code">
+      <div class="code-head"><span class="label">not actually a schema problem</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>'paymentPayload' is invalid: must match one of [x402V2Pay...</code></pre>
+    </div>
+    <p>Measured on Base, same wallet and client: <span class="num">4188</span> bytes accepted, <span class="num">4260</span> bytes rejected. One endpoint stopped accepting payment purely because its description was longer than the others. Writing better documentation made it unpayable.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <ul>
+      <li><a href="https://base-gas-x402-production.up.railway.app">Live API</a></li>
+      <li><a href="https://base-gas-x402-production.up.railway.app/openapi.json">OpenAPI</a></li>
+      <li><a href="https://base-gas-x402-production.up.railway.app/health">/health</a></li>
+      <li><a href="https://github.com/memosr/base-gas-x402">Source</a></li>
+      <li><a href="https://github.com/memosr/base-gas-skill">Skill</a></li>
+      <li><a href="https://www.npmjs.com/package/base-gas-mcp">MCP</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+    </ul>
+    <p>MIT licensed. Payments settle in USDC on Base mainnet (<code>eip155:8453</code>) through the Coinbase CDP production facilitator.</p>
+    <p>Single instance on Railway. No uptime guarantee, no SLA.</p>
+  </div>
+</footer>
+
+<script>
+// Copy buttons. The code is readable without this.
+document.querySelectorAll(".code").forEach(function (block) {
+  var btn = block.querySelector(".copy");
+  var code = block.querySelector("pre code");
+  if (!btn || !code || !navigator.clipboard) { if (btn) btn.hidden = true; return; }
+  btn.addEventListener("click", function () {
+    navigator.clipboard.writeText(code.textContent).then(function () {
+      var prev = btn.textContent;
+      btn.textContent = "Copied";
+      setTimeout(function () { btn.textContent = prev; }, 1600);
+    }).catch(function () { btn.textContent = "Press Ctrl+C"; });
+  });
+});
+
+// Live coverage from the free /health route.
+// If CORS or the network blocks it, the static sentence stays as written.
+(function () {
+  var el = document.getElementById("coverage-text");
+  if (!el || !window.fetch) return;
+  fetch("https://base-gas-x402-production.up.railway.app/health", { mode: "cors" })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d || !d.history || typeof d.history.samples !== "number") return;
+      var h = d.history;
+      el.textContent = "Tracking Base gas: " + h.samples + " samples over " +
+        h.hoursCovered + " hours, one every " +
+        Math.round((h.sampleIntervalSeconds || 300) / 60) + " minutes.";
+    })
+    .catch(function () { /* keep the static text */ });
+})();
+</script>
+</body>
+</html>
