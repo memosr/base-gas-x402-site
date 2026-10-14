@@ -8,7 +8,7 @@ Machine-readable spec: https://base-gas-x402-production.up.railway.app/openapi.j
 
 ## Endpoints
 
-- GET /gas ($0.005): base fee, low/medium/high priority tiers, gas price, and a cost estimate for any gasLimit. Optional: gasLimit (21000-30000000, default 21000).
+- GET /gas ($0.002): base fee, low/medium/high priority tiers, gas price, and a cost estimate for any gasLimit. Optional: gasLimit (21000-30000000, default 21000).
 - GET /gas/compare ($0.01): Base, OP Mainnet, Arbitrum One, and Ethereum ranked cheapest first. Optional: gasLimit (21000-30000000, default 21000). Chains whose RPC fails are listed under `unavailable` instead of failing the request.
 - GET /gas/history ($0.01): time series plus min/max/avg/median, a `verdict` (cheap, normal, expensive, flat), `verdictNote`, and `spreadPercent`. Optional: hours (1-168).
 - GET /gas/cheapest-window ($0.02): `hasDailyCycle`, a plain-language `recommendation`, hourly averages, and `savingsPercent`. Optional: hours (1-168).
@@ -50,7 +50,7 @@ ETH transfer 21000, ERC-20 transfer 65000, NFT mint 85000, Uniswap swap 180000, 
 - Costs are priced per operation when you pass gasLimit, not as a raw gwei figure.
 - /gas/compare degrades partially: one unreachable RPC does not fail the whole response.
 - Open source and MIT licensed end to end.
-- /gas at $0.005 is the cheapest current-gas endpoint in this category. This does not hold for the other routes.
+- /gas at $0.002 is below most Base gas endpoints and returns the cost in USD. It is not the cheapest: at least one competitor sells plain gas data for $0.001.
 
 ## What it is not
 

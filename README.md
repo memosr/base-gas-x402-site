@@ -33,4 +33,4 @@ Or drag the folder into the Vercel dashboard. Cloudflare Pages works the same wa
 
 - The page is fully readable with JavaScript disabled. JS only powers the copy buttons and the live `/health` line.
 - The `/health` widget uses `fetch` against the API. If the API does not send `Access-Control-Allow-Origin`, the request fails silently and the static sentence stays. Nothing is faked. To turn the live number on, add CORS for `GET /health` on the API side.
-- Prices in `index.html` and `llms.txt` are transcribed from `/openapi.json`. If the API's prices change, update both files. Verified against the live spec: `/gas` $0.005, `/gas/compare` $0.01, `/gas/history` $0.012, `/gas/cheapest-window` $0.02, `/health` free.
+- Prices in `index.html` and `llms.txt` are transcribed from `/openapi.json`. If the API's prices change, update both files. Verified against the live spec: `/gas` $0.002, `/gas/compare` $0.01, `/gas/history` $0.01, `/gas/cheapest-window` $0.02, `/health` free.

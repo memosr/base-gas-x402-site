@@ -271,7 +271,7 @@ npx skills add memosr/base-gas-skill/mcp --all --yes</code></pre>
           <tr><th scope="col">Route</th><th scope="col">Price</th><th scope="col">Returns</th></tr>
         </thead>
         <tbody>
-          <tr><td>GET /gas</td><td class="price">$0.005</td><td>Base fee, priority tiers, gas price, cost for any <code>gasLimit</code></td></tr>
+          <tr><td>GET /gas</td><td class="price">$0.002</td><td>Base fee, priority tiers, gas price, cost for any <code>gasLimit</code></td></tr>
           <tr><td>GET /gas/compare</td><td class="price">$0.01</td><td>Base, OP Mainnet, Arbitrum One, Ethereum, cheapest first</td></tr>
           <tr><td>GET /gas/history</td><td class="price">$0.01</td><td>Time series, min/max/avg/median, <code>verdict</code>, <code>spreadPercent</code></td></tr>
           <tr><td>GET /gas/cheapest-window</td><td class="price">$0.02</td><td><code>hasDailyCycle</code>, <code>recommendation</code>, hourly averages</td></tr>
@@ -380,8 +380,8 @@ npx skills add memosr/base-gas-skill/mcp --all --yes</code></pre>
       <dt>Open source, end to end</dt>
       <dd><a href="https://github.com/memosr/base-gas-x402">API</a>, <a href="https://www.npmjs.com/package/base-gas-mcp">MCP server</a>, and <a href="https://github.com/memosr/base-gas-skill">skill</a> are public and MIT licensed. The skill ships rules that steer agents away from overspending.</dd>
 
-      <dt>Cheapest current-gas endpoint in the category</dt>
-      <dd><code>/gas</code> at <span class="num">$0.005</span>, against <span class="num">$0.01</span>, <span class="num">$0.013</span>, <span class="num">$0.05</span>, and <span class="num">$0.10</span>. Only for <code>/gas</code>: <code>/gas/history</code> at <span class="num">$0.01</span> is not the cheapest, a <span class="num">$0.001</span> competitor exists.</dd>
+      <dt>Low-cost current gas, priced in dollars</dt>
+      <dd><code>/gas</code> at <span class="num">$0.002</span>, below most Base gas endpoints (<span class="num">$0.005</span> to <span class="num">$0.10</span>), and it returns the cost in USD. It is not the cheapest: at least one competitor sells plain gas data for <span class="num">$0.001</span>.</dd>
     </dl>
 
     <p class="note">What it is not: not the only or first Base gas API, and not the cheapest overall. It will not save you money by timing transactions on Base, because there is nothing there to time. Single instance on Railway, no uptime guarantee and no SLA. No usage numbers to quote, it is new.</p>
