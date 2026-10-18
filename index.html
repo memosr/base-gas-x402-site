@@ -241,10 +241,11 @@ npx agentcash@latest balance</code></pre>
     <h3>2. MCP server</h3>
     <div class="code">
       <div class="code-head"><span class="label">install</span><button class="copy" type="button">Copy</button></div>
-      <pre><code>npx agentcash@latest install -y
-npx skills add memosr/base-gas-skill/mcp --all --yes</code></pre>
+      <pre><code>claude mcp add base-gas \
+  --env BUYER_PRIVATE_KEY=0xYOUR_FUNDED_BASE_KEY \
+  -- npx -y base-gas-mcp</code></pre>
     </div>
-    <p>Published on npm as <a href="https://www.npmjs.com/package/base-gas-mcp"><code>base-gas-mcp</code></a>.</p>
+    <p>Five tools, one of them free. The wallet needs USDC on Base, no ETH. Payments above $0.05 per call are refused unless you raise <code>MAX_USD_PER_CALL</code>. Claude Desktop and other clients: see <a href="https://www.npmjs.com/package/base-gas-mcp"><code>base-gas-mcp</code></a> on npm.</p>
 
     <h3>3. Direct HTTP</h3>
     <div class="code">
