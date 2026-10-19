@@ -8,7 +8,7 @@ Machine-readable spec: https://base-gas-x402-production.up.railway.app/openapi.j
 
 ## Endpoints
 
-- GET /gas ($0.002): base fee, low/medium/high priority tiers, gas price, and a cost estimate for any gasLimit. Optional: gasLimit (21000-30000000, default 21000).
+- GET /gas ($0.002): base fee, low/medium/high priority tiers, gas price, a cost estimate for any gasLimit (USD, ETH, gwei), and suggestedFees: ready-to-sign maxFeePerGas / maxPriorityFeePerGas per tier, in wei. Optional: gasLimit (21000-30000000, default 21000).
 - GET /gas/compare ($0.01): Base, OP Mainnet, Arbitrum One, and Ethereum ranked cheapest first. Optional: gasLimit (21000-30000000, default 21000). Chains whose RPC fails are listed under `unavailable` instead of failing the request.
 - GET /gas/history ($0.01): time series plus min/max/avg/median, a `verdict` (cheap, normal, expensive, flat), `verdictNote`, and `spreadPercent`. Optional: hours (1-168).
 - GET /gas/cheapest-window ($0.02): `hasDailyCycle`, a plain-language `recommendation`, hourly averages, and `savingsPercent`. Optional: hours (1-168).

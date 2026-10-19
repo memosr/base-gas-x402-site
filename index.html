@@ -272,7 +272,7 @@ npx agentcash@latest balance</code></pre>
           <tr><th scope="col">Route</th><th scope="col">Price</th><th scope="col">Returns</th></tr>
         </thead>
         <tbody>
-          <tr><td>GET /gas</td><td class="price">$0.002</td><td>Base fee, priority tiers, gas price, cost for any <code>gasLimit</code></td></tr>
+          <tr><td>GET /gas</td><td class="price">$0.002</td><td>Base fee, priority tiers, cost for any <code>gasLimit</code>, ready-to-sign <code>maxFeePerGas</code></td></tr>
           <tr><td>GET /gas/compare</td><td class="price">$0.01</td><td>Base, OP Mainnet, Arbitrum One, Ethereum, cheapest first</td></tr>
           <tr><td>GET /gas/history</td><td class="price">$0.01</td><td>Time series, min/max/avg/median, <code>verdict</code>, <code>spreadPercent</code></td></tr>
           <tr><td>GET /gas/cheapest-window</td><td class="price">$0.02</td><td><code>hasDailyCycle</code>, <code>recommendation</code>, hourly averages</td></tr>
@@ -311,10 +311,16 @@ npx agentcash@latest balance</code></pre>
     "eth": "0.000000126417942",
     "usd": "0.00034"
   },
+  "suggestedFees": {
+    "unit": "wei",
+    "low":    { "maxFeePerGas": "10580202", "maxPriorityFeePerGas": "580202" },
+    "medium": { "maxFeePerGas": "11019902", "maxPriorityFeePerGas": "1019902" },
+    "high":   { "maxFeePerGas": "21204355", "maxPriorityFeePerGas": "11204355" }
+  },
   "ethUsd": { "price": "2689.87", "source": "chainlink-eth-usd-base", "updatedAt": "2026-09-30T16:44:29.000Z" }
 }</code></pre>
     </div>
-    <p>A live call, default <code>gasLimit</code> (a plain ETH transfer). <code>estimatedTransferCost.usd</code> comes from the Chainlink ETH/USD feed on Base (<code>ethUsd</code>). If the feed is unreadable, both fields are <code>null</code> and the rest of the response is unchanged.</p>
+    <p>A live call, default <code>gasLimit</code> (a plain ETH transfer). <code>estimatedTransferCost.usd</code> comes from the Chainlink ETH/USD feed on Base (<code>ethUsd</code>). If the feed is unreadable, both fields are <code>null</code> and the rest of the response is unchanged. <code>suggestedFees</code> goes straight into a wallet or viem <code>sendTransaction</code>: <code>maxFeePerGas</code> is 2 &times; base fee + priority, a ceiling, and the unused part is refunded.</p>
 
     <h3>Real response: <code>/gas/compare</code></h3>
     <p>Base comes second here, not first. That is left in on purpose: anyone can call the endpoint and check.</p>
