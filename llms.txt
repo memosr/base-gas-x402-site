@@ -29,6 +29,10 @@ MCP server (npm: base-gas-mcp, MCP Registry: io.github.memosr/base-gas-mcp):
     claude mcp add base-gas --env BUYER_PRIVATE_KEY=0xYOUR_FUNDED_BASE_KEY -- npx -y base-gas-mcp
     Wallet needs USDC on Base, no ETH. Payments above $0.05 per call are refused (MAX_USD_PER_CALL).
 
+elizaOS plugin:
+    npm install @memosr/plugin-base-gas
+    Add "@memosr/plugin-base-gas" to the character's plugins; uses EVM_PRIVATE_KEY, refuses payments above $0.05.
+
 Direct HTTP, free:
     curl -s https://base-gas-x402-production.up.railway.app/health
 
@@ -65,3 +69,4 @@ ETH transfer 21000, ERC-20 transfer 65000, NFT mint 85000, Uniswap swap 180000, 
 - API: https://github.com/memosr/base-gas-x402
 - Agent skill: https://github.com/memosr/base-gas-skill
 - MCP server: https://www.npmjs.com/package/base-gas-mcp
+- elizaOS plugin: https://www.npmjs.com/package/@memosr/plugin-base-gas

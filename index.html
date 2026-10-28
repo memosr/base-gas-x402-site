@@ -223,7 +223,7 @@ footer p{margin:0 0 6px;font-size:13px}
 <section id="setup" aria-labelledby="setup-h">
   <div class="wrap">
     <h2 id="setup-h">Setup</h2>
-    <p class="lead">Three ways in. Pick one.</p>
+    <p class="lead">Four ways in. Pick one.</p>
 
     <h3>1. Agent skill (recommended)</h3>
     <div class="code">
@@ -247,7 +247,14 @@ npx agentcash@latest balance</code></pre>
     </div>
     <p>Five tools, one of them free. The wallet needs USDC on Base, no ETH. Payments above $0.05 per call are refused unless you raise <code>MAX_USD_PER_CALL</code>. Claude Desktop and other clients: see <a href="https://www.npmjs.com/package/base-gas-mcp"><code>base-gas-mcp</code></a> on npm.</p>
 
-    <h3>3. Direct HTTP</h3>
+    <h3>3. elizaOS plugin</h3>
+    <div class="code">
+      <div class="code-head"><span class="label">install</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>npm install @memosr/plugin-base-gas</code></pre>
+    </div>
+    <p>Add <code>"@memosr/plugin-base-gas"</code> to your character's plugins. It reuses the agent's <code>EVM_PRIVATE_KEY</code> and refuses any payment above $0.05. Source: <a href="https://github.com/memosr/plugin-base-gas">plugin-base-gas</a>.</p>
+
+    <h3>4. Direct HTTP</h3>
     <div class="code">
       <div class="code-head"><span class="label">free, no wallet needed</span><button class="copy" type="button">Copy</button></div>
       <pre><code>curl -s https://base-gas-x402-production.up.railway.app/health</code></pre>
@@ -349,16 +356,15 @@ npx agentcash@latest balance</code></pre>
     <div class="code">
       <div class="code-head"><span class="label">GET /gas/cheapest-window</span><button class="copy" type="button">Copy</button></div>
       <pre><code>{
-  "hasDailyCycle": true,
-  "recommendation": "Avoid 08:00 and 14:00 UTC. The cheapest hour is 22:00 UTC: about 1.1% cheaper than the average hour and 15.3% cheaper than the priciest.",
-  "savingsPercent": 15.3,
+  "hasDailyCycle": false,
+  "recommendation": "No meaningful daily gas cycle in this window. Timing a transaction by hour of day would not have saved anything here.",
   "savingsVsAveragePercent": 1.1,
-  "avoidHoursUtc": [8, 14],
-  "cheapestHourUtc": 22
+  "avoidHoursUtc": [],
+  "confidence": "pattern",
+  "cheapestHourUtc": 6
 }</code></pre>
     </div>
-    <p>Seven days of observation. <code>avoidHoursUtc</code> names the hours running hot, worst first; 22:00 UTC is the cheapest hour. Read the two percentages separately: <code>savingsPercent</code> (15.3%) compares the cheapest hour against the single priciest one and can be dominated by one spike, while <code>savingsVsAveragePercent</code> (1.1%) compares it against the average hour, which is the honest everyday saving.</p>
-    <p>Over shorter windows that miss a spike, this endpoint returns <code>hasDailyCycle: false</code> and says plainly that there is nothing to time, rather than naming a cheapest hour the data does not support.</p>
+    <p>A typical week on Base: gas sits on its fee floor and the cheapest hour is about 1% cheaper than the average one, so the endpoint says plainly that there is nothing to time instead of inventing a schedule. When a week does show hours running hot, <code>avoidHoursUtc</code> names them, worst first, and <code>confidence</code> says whether that is one spike (<code>single-day</code>) or a repeating pattern (<code>pattern</code>).</p>
   </div>
 </section>
 
