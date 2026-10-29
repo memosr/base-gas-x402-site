@@ -70,3 +70,8 @@ ETH transfer 21000, ERC-20 transfer 65000, NFT mint 85000, Uniswap swap 180000, 
 - Agent skill: https://github.com/memosr/base-gas-skill
 - MCP server: https://www.npmjs.com/package/base-gas-mcp
 - elizaOS plugin: https://www.npmjs.com/package/@memosr/plugin-base-gas
+
+Trust:
+- Payment settles only after a successful response; a request that ends in 4xx or 5xx is never charged.
+- Independent daily uptime and settlement record: https://agenteconomy.report/s/base-gas-x402-production.up.railway.app
+- Security reports: https://github.com/memosr/base-gas-x402/blob/main/SECURITY.md

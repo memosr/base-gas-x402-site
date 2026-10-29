@@ -393,6 +393,8 @@ npx agentcash@latest balance</code></pre>
       <dt>Open source, end to end</dt>
       <dd><a href="https://github.com/memosr/base-gas-x402">API</a>, <a href="https://www.npmjs.com/package/base-gas-mcp">MCP server</a>, and <a href="https://github.com/memosr/base-gas-skill">skill</a> are public and MIT licensed. The skill ships rules that steer agents away from overspending.</dd>
 
+      <dt>Never charged for a failed call</dt>
+      <dd>Payment settles only after a successful response. If a request ends in an error (bad input, an RPC outage), the payment is cancelled before it settles. Uptime, payers and settlement are published independently every day by <a href="https://agenteconomy.report/s/base-gas-x402-production.up.railway.app">Agent Economy Report</a>, and security reports go through <a href="https://github.com/memosr/base-gas-x402/blob/main/SECURITY.md">SECURITY.md</a>.</dd>
       <dt>Low-cost current gas, priced in dollars</dt>
       <dd><code>/gas</code> at <span class="num">$0.002</span>, below most Base gas endpoints (<span class="num">$0.005</span> to <span class="num">$0.10</span>), and it returns the cost in USD. It is not the cheapest: at least one competitor sells plain gas data for <span class="num">$0.001</span>.</dd>
     </dl>
@@ -440,6 +442,8 @@ npx agentcash@latest balance</code></pre>
       <li><a href="https://github.com/memosr/base-gas-x402">Source</a></li>
       <li><a href="https://github.com/memosr/base-gas-skill">Skill</a></li>
       <li><a href="https://www.npmjs.com/package/base-gas-mcp">MCP</a></li>
+      <li><a href="https://www.npmjs.com/package/@memosr/plugin-base-gas">elizaOS</a></li>
+      <li><a href="https://github.com/memosr/base-gas-x402/blob/main/SECURITY.md">Security</a></li>
       <li><a href="/llms.txt">llms.txt</a></li>
     </ul>
     <p>MIT licensed. Payments settle in USDC on Base mainnet (<code>eip155:8453</code>) through the Coinbase CDP production facilitator.</p>
